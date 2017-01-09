@@ -1,0 +1,10 @@
+[Unit]
+Description=Timer for rsync data sync
+
+[Timer]
+OnCalendar=*-*-* 06:00:00
+RandomizedDelaySec=900
+Persistent=true
+
+[Install]
+WantedBy=timers.target

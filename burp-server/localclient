@@ -1,0 +1,5 @@
+password = ${CLIENT_PASSWORD}
+
+# More configuration files can be read, using syntax like the following
+# (without the leading '# ').
+. incexc/example

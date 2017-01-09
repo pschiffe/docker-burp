@@ -1,0 +1,11 @@
+[Unit]
+Description=Unmount encfs mount before shutdown
+Before=burp.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStop=/usr/bin/bash -c '[ -d /var/spool/burp-plain ] && /usr/bin/fusermount -u /var/spool/burp-plain'
+
+[Install]
+WantedBy=multi-user.target

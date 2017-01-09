@@ -1,0 +1,9 @@
+[Unit]
+Description=Rsync data dir to remote destination
+
+[Service]
+Type=simple
+ExecStart=/rsync.sh
+
+[Install]
+WantedBy=multi-user.target

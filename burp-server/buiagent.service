@@ -1,0 +1,11 @@
+[Unit]
+Description=Burp-UI Agent
+After=network.target burp.service
+
+[Service]
+Environment=CONFIG=/etc/burp/buiagent.cfg
+ExecStart=/usr/bin/bui-agent -vvvc $CONFIG
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
