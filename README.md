@@ -46,9 +46,30 @@ If at least `RSYNC_DEST` env var is set, timer script in the container will try 
 
 And that's not all, there is one more feature - if you set `RESTORE_FROM_RSYNC` env var to `1` and `/var/spool/burp` directory is empty, the container will try to download all the data from remote location with rsync (required rsync connection env vars must be set, of course).
 
+## Burp Web UI
+
+[![](https://images.microbadger.com/badges/image/pschiffe/burp-ui.svg)](https://microbadger.com/images/pschiffe/burp-ui "Get your own image badge on microbadger.com")
+
+https://hub.docker.com/r/pschiffe/burp-ui/
+
+Burp UI image contains awesome [web ui for Burp created by Ziirish](https://git.ziirish.me/ziirish/burp-ui). If running this container on the same host as the Burp server, you can just link this container to the Burp server with alias `burp` and more or less that's it. The web service is listening on port `5000`. If you want to manage Burp server on different host, at first you need to specify `BUI_AGENT_PASSWORD` env var and expose port `10000` of **burp-server** container, then you need to manually edit the `/etc/burp/burpui.cfg.tpl` file in burp-ui container and add the new `[Agent:name]` section to it. Be sure to update the template file `burpui.cfg.tpl` as the `burpui.cfg` file is overwritten every time the container starts.
+
+### Persistent data
+
+`/etc/burp` directory contains configuration for this container.
+
+### Example
+
+```
+docker run -d -p 5000:5000 --name burp-ui \
+  -v burp-ui-conf:/etc/burp \
+  --link burp-server:burp \
+  pschiffe/burp-ui
+```
+
 ## Burp Client
 
-[![](https://images.microbadger.com/badges/image/pschiffe/burp-client.svg)](https://microbadger.com/images/pschiffe/burp-client "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/pschiffe/burp-client.svg)](https://microbadger.com/images/pschiffe/burp-client "Get your own image badge on microbadger.clientcom")
 
 https://hub.docker.com/r/pschiffe/burp-client/
 
