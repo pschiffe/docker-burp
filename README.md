@@ -45,3 +45,32 @@ If you want to regularly sync your backed up data to a remote location, you can 
 If at least `RSYNC_DEST` env var is set, timer script in the container will try to rsync the local data to the remote location at around 6 AM every morning (this can be modified in `/etc/systemd/system/rsync-sync.timer` file).
 
 And that's not all, there is one more feature - if you set `RESTORE_FROM_RSYNC` env var to `1` and `/var/spool/burp` directory is empty, the container will try to download all the data from remote location with rsync (required rsync connection env vars must be set, of course).
+
+## Burp Client
+
+[![](https://images.microbadger.com/badges/image/pschiffe/burp-client.svg)](https://microbadger.com/images/pschiffe/burp-client "Get your own image badge on microbadger.com")
+
+https://hub.docker.com/r/pschiffe/burp-client/
+
+To actually backup data and send them to the Burp server, you need Burp client. Usage of this image is pretty simple. With `BURP_SERVER` and `BURP_SERVER_PORT` env vars you can specify address and port of the Burp server, client password goes in `BURP_CLIENT_PASSWORD` env var and everything you need to backup just mount to `/tobackup` directory in the container. Be aware however, that you might need to use the `--security-opt label:disable` option when accessing various system directories on the host. It's also possible to link to Burp server container with alias `burp` and I would recomment to set the container hostname to something meaningful, as the client will be identified with it's hostname in the Burp server configuration.
+
+### Persistent data
+
+`/etc/burp` persistent directory in the container stores Burp client configuration.
+
+### Example
+
+```
+docker run -d --name burp-client \
+  -e BURP_SERVER=some-server.host \
+  -e BURP_CLIENT_PASSWORD=super-secret \
+  -v burp-client-conf:/etc/burp \
+  -v /etc:/tobackup/somehost-etc:ro \
+  -v /home:/tobackup/somehost-home:ro \
+  -v some-docker-vol:/tobackup/some-docker-vol:ro \
+  --hostname $HOSTNAME \
+  --security-opt label:disable \
+  pschiffe/burp-client
+```
+
+Once this container is created, it will backup the specified data and exit. After that, it's recommended to start the container ~ every 20 minutes with `docker start burp-client`, so it can check with the server and backup new files if scheduled. Schedule is determined by the server, not the client.
