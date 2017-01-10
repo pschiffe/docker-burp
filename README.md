@@ -69,7 +69,7 @@ docker run -d -p 5000:5000 --name burp-ui \
 
 ## Burp Client
 
-[![](https://images.microbadger.com/badges/image/pschiffe/burp-client.svg)](https://microbadger.com/images/pschiffe/burp-client "Get your own image badge on microbadger.clientcom")
+[![](https://images.microbadger.com/badges/image/pschiffe/burp-client.svg)](https://microbadger.com/images/pschiffe/burp-client "Get your own image badge on microbadger.com")
 
 https://hub.docker.com/r/pschiffe/burp-client/
 
