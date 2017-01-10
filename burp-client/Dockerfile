@@ -12,6 +12,7 @@ RUN dnf -y --setopt=tsflags=nodocs install 'dnf-command(copr)' \
     && rm -f /etc/burp/burp.conf
 
 ENV BURP_SERVER=burp \
+    BURP_SERVER_PORT=4971 \
     BURP_CLIENT_PASSWORD=BurpClient123
 
 VOLUME [ "/etc/burp" ]

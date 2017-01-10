@@ -1,7 +1,7 @@
 # This is an example config file for the burp client.
 
 mode = client
-port = 4971
+port = ${BURP_SERVER_PORT}
 status_port = 4972
 server = ${BURP_SERVER}
 password = ${BURP_CLIENT_PASSWORD}
