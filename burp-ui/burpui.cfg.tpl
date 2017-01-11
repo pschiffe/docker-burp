@@ -113,7 +113,7 @@ scookie = true
 # application. You can also set it to 'none' although this is not recommended.
 appsecret = random
 
-{% if BURP_ENV_BUI_AGENT_PASSWORD is defined, %}
+{% if BURP_ENV_BUI_AGENT_PASSWORD is defined %}
 [Agent:burp]
 # bui-agent address
 host = burp
