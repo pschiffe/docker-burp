@@ -11,7 +11,7 @@ RUN dnf -y --setopt=tsflags=nodocs install \
 RUN pip3 install envtpl \
     && rm -rf ~/.cache/*
 
-RUN pip install "burp-ui[ldap_authentication]" \
+RUN pip install burp-ui "burp-ui[ldap_authentication]" \
     && rm -rf ~/.cache/* \
     && mkdir -p /etc/burp /etc/burp.tpl
 
