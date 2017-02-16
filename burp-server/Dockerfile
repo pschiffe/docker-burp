@@ -14,7 +14,7 @@ RUN dnf -y --setopt=tsflags=nodocs install 'dnf-command(copr)' \
         rsync \
         stunnel \
         procps-ng \
-        https://kojipkgs.fedoraproject.org/packages/python-cffi/1.7.0/3.fc25/x86_64/python3-cffi-1.7.0-3.fc25.x86_64.rpm \
+        https://kojipkgs.fedoraproject.org//packages/python-cffi/1.8.3/3.fc26/x86_64/python3-cffi-1.8.3-3.fc26.x86_64.rpm \
     && dnf clean all \
     && cp -a /etc/burp /etc/burp.tpl \
     && rm -rf /etc/burp/*
