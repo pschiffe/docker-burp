@@ -11,5 +11,4 @@ fi
 envtpl < /etc/burp/burpui.cfg.tpl > /etc/burp/burpui.cfg
 
 export LANG='en_US.UTF-8'
-#exec /usr/bin/gunicorn -k gevent -w 4 --access-logfile - -b '0.0.0.0:5000' 'burpui:create_app(conf="/etc/burp/burpui.cfg", verbose=3)'
 exec /usr/bin/gunicorn-3 -k gevent -w 4 --access-logfile - -b '0.0.0.0:5000' 'burpui:create_app(conf="/etc/burp/burpui.cfg", verbose=3)'
