@@ -6,6 +6,7 @@ RUN dnf -y install \
     fuse-encfs \
     gettext \
     hostname \
+    nmap-ncat \
     procps-ng \
     python3-cffi \
     python3-gevent \
@@ -25,6 +26,8 @@ ENV container=docker \
     BUI_AGENT_PASSWORD=BurpAgent123
 
 EXPOSE 4971 10000
+
+HEALTHCHECK --interval=10s CMD nc -z 127.0.0.1 4971
 
 VOLUME [ "/etc/burp", "/var/spool/burp" ]
 
