@@ -1,19 +1,15 @@
-FROM fedora:25
-MAINTAINER "Peter Schiffer" <pschiffe@redhat.com>
+FROM fedora:30
+MAINTAINER "Peter Schiffer" <peter@rfv.sk>
 
-RUN dnf -y --setopt=tsflags=nodocs install \
-        python-pip \
-        pyOpenSSL \
-        python-gevent \
-        python-gunicorn \
-    && dnf clean all
+RUN dnf -y install \
+    python3-gevent \
+    python3-gunicorn \
+  && dnf clean all
 
-RUN pip3 install envtpl \
-    && rm -rf ~/.cache/*
-
-RUN pip install burp-ui "burp-ui[ldap_authentication]" \
-    && rm -rf ~/.cache/* \
-    && mkdir -p /etc/burp /etc/burp.tpl
+RUN pip3 install --no-cache-dir \
+    burp-ui[ldap_authentication] \
+    envtpl \
+  && mkdir -p /etc/burp /etc/burp.tpl
 
 EXPOSE 5000
 
