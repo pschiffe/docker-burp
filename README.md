@@ -20,7 +20,7 @@ The container uses two persistent volumes - `/etc/burp` for configuration and `/
 
 ### Sytemd
 
-Systemd is used to manage multiple processes inside of the container, so a couple of special requirements are needed when running it: `/run` and `/tmp` must be mounted on tmpfs, and cgroup filesystem must be bind-mounted from the host. Example Docker run bit when running on Red Hat based distro: `--tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro` (If you are using [Fedora](https://getfedora.org/) or CentOS/RHEL, you can install `oci-systemd-hook` rpm package, and you don't need to specify any of this, it will be done automatically for you.)
+Systemd is used to manage multiple processes inside of the container, so a couple of special requirements are needed when running it: `/run` and `/tmp` must be mounted on tmpfs, and cgroup filesystem must be bind-mounted from the host. Example Docker run bit when running on Red Hat based distro: `--tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro`
 
 Besides, if you want to see the logs with `docker logs` command, allocate tty for the container with `-t, --tty` option.
 
@@ -34,17 +34,21 @@ docker run -dt -p 4971:4971 --name burp-server \
   pschiffe/burp-server
 ```
 
+### Adding clients
+
+To add burp clients to the server, copy `/etc/burp/clientconfdir/localclient` file inside of the server container to `/etc/burp/clientconfdir/[client hostname]` and change the password inside that file. Then you need to pass that password to the client, so it's allowed to talk to the server. Docs: https://burp.grke.org/docs/add-remove.html
+
 ### Encryption
 
 It's possible to encrypt backed up data with `encfs`. To use it, simply provide encryption password in `ENCRYPT_PASSWORD` env var. Because of the encfs fuse fs, you need to expose the `/dev/fuse` to the container with `--device /dev/fuse`, provide additional capability and possibly disable selinux (or apparmor) confinement with `--cap-add SYS_ADMIN --security-opt label:disable`.
 
 ### Rsync to remote location
 
-If you want to regularly sync your backed up data to a remote location, you can use built-in support for rsync. With `RSYNC_DEST` env var specify remote location in format `rsync://user@server/path`. Password for rsync user can be provided in `RSYNC_PASS` env var. If the remote location provides rsync secured with stunnel, you can use that as well. Specify remote server and port in `STUNNEL_RSYNC_HOST` env var in format `server:port` and then, change the server part of the `RSYNC_DEST` to `localhost`, as in `rsync://user@localhost/path`.
+If you want to regularly sync your backed up data to a remote location, you can use the built-in support for rsync. With `RSYNC_DEST` env var specify remote location in format `rsync://user@server/path`. Password for rsync user can be provided in `RSYNC_PASS` env var. If the remote location provides rsync secured with stunnel, you can use that as well. Specify remote server and port in `STUNNEL_RSYNC_HOST` env var in format `server:port` and then, change the server part of the `RSYNC_DEST` to `localhost`, as in `rsync://user@localhost/path`.
 
 If at least `RSYNC_DEST` env var is set, timer script in the container will try to rsync the local data to the remote location at around 6 AM every morning (this can be modified in `/etc/systemd/system/rsync-sync.timer` file).
 
-And that's not all, there is one more feature - if you set `RESTORE_FROM_RSYNC` env var to `1` and `/var/spool/burp` directory is empty, the container will try to download all the data from remote location with rsync (required rsync connection env vars must be set, of course).
+And that's not all, there is one more feature - if you set `RESTORE_FROM_RSYNC` env var to `1` and `/var/spool/burp` directory is empty, the container will try to download all the data from remote location with rsync (required rsync connection env vars must be set).
 
 ## Burp Web UI
 
@@ -52,7 +56,7 @@ And that's not all, there is one more feature - if you set `RESTORE_FROM_RSYNC` 
 
 https://hub.docker.com/r/pschiffe/burp-ui/
 
-Burp UI image contains awesome [web ui for Burp created by Ziirish](https://git.ziirish.me/ziirish/burp-ui). If running this container on the same host as the Burp server, you can just link this container to the Burp server with alias `burp` and more or less that's it. The web service is listening on port `5000`. If you want to manage Burp server on different host, at first you need to specify `BUI_AGENT_PASSWORD` env var and expose port `10000` of **burp-server** container, then you need to manually edit the `/etc/burp/burpui.cfg.tpl` file in burp-ui container and add the new `[Agent:name]` section to it. Be sure to update the template file `burpui.cfg.tpl` as the `burpui.cfg` file is overwritten every time the container starts.
+Burp UI image contains awesome [web ui for Burp created by Ziirish](https://git.ziirish.me/ziirish/burp-ui). If running this container on the same host as the Burp server, you can just link this container to the Burp server with alias `burp` and more or less that's it. The web service is listening on port `5000`. If you want to manage Burp server on a different host, at first you need to specify `BUI_AGENT_PASSWORD` env var and expose port `10000` of **burp-server** container, then you need to manually edit the `/etc/burp/burpui.cfg.tpl` file in the burp-ui container and add the new `[Agent:name]` section to it. Be sure to update the template file `burpui.cfg.tpl` as the `burpui.cfg` file is overwritten every time the container starts.
 
 ### Persistent data
 
@@ -73,7 +77,7 @@ docker run -d -p 5000:5000 --name burp-ui \
 
 https://hub.docker.com/r/pschiffe/burp-client/
 
-To actually backup data and send them to the Burp server, you need Burp client. Usage of this image is pretty simple. With `BURP_SERVER` and `BURP_SERVER_PORT` env vars you can specify address and port of the Burp server, client password goes in `BURP_CLIENT_PASSWORD` env var and everything you need to backup just mount to `/tobackup` directory in the container. Be aware however, that you might need to use the `--security-opt label:disable` option when accessing various system directories on the host. It's also possible to link to Burp server container with alias `burp` and I would recomment to set the container hostname to something meaningful, as the client will be identified with it's hostname in the Burp server configuration.
+To backup data and send them to the Burp server, you need Burp client. Usage of this image is pretty simple. With `BURP_SERVER` and `BURP_SERVER_PORT` env vars you can specify an address and port of the Burp server, client password goes in `BURP_CLIENT_PASSWORD` env var and everything you need to backup just mount to `/tobackup` directory in the container. Be aware, however, that you might need to use the `--security-opt label:disable` option when accessing various system directories on the host. It's also possible to link to Burp server container with alias `burp` and I would recommend setting the container hostname to something meaningful, as the client will be identified with its hostname in the Burp server configuration.
 
 ### Persistent data
 
@@ -94,4 +98,4 @@ docker run -d --name burp-client \
   pschiffe/burp-client
 ```
 
-Once this container is created, it will backup the specified data and exit. After that, it's recommended to start the container ~ every 20 minutes with `docker start burp-client`, so it can check with the server and backup new files if scheduled. Schedule is determined by the server, not the client.
+Once this container is created, it will backup the specified data and exit. After that, it's recommended to start the container ~ every 20 minutes with `docker start burp-client`, so it can check with the server and backup new files if scheduled. The schedule is determined by the server, not the client.
