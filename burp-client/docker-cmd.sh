@@ -9,4 +9,6 @@ fi
 
 envsubst < /etc/burp/burp.conf.tpl > /etc/burp/burp.conf
 
+wait-for-it.sh "${BURP_SERVER}:${BURP_SERVER_PORT}"
+
 exec /usr/sbin/burp -a t
