@@ -2,6 +2,8 @@
 
 mode = client
 port = ${BURP_SERVER_PORT}
+# A different port to use for restores - see the man page for more options.
+#port_restore = 5971
 status_port = 4972
 server = ${BURP_SERVER}
 password = ${BURP_CLIENT_PASSWORD}
@@ -10,7 +12,7 @@ cname = ${HOSTNAME}
 # 0 to decide automatically, 1 to force protocol1 mode (file level granularity
 # with a pseudo mirrored storage on the server and optional rsync). 2 forces
 # protocol2 mode (inline deduplication with variable length blocks).
-protocol = 1
+# protocol = 0
 pidfile = /var/run/burp.client.pid
 syslog = 0
 stdout = 1
@@ -26,7 +28,7 @@ progress_counter = 1
 # autoupgrade_os=test_os
 # Wait a random number of seconds between 0 and the given number before
 # contacting the server on a timed backup.
-#randomise = 1200
+# randomise = 1200
 
 # Set server_can_restore to 0 if you do not want the server to be able to
 # initiate a restore.
@@ -120,6 +122,7 @@ nobackup = .nobackup
 exclude_comp=bz2
 exclude_comp=gz
 exclude_comp=xz
+exclude_comp=zst
 # When backing up, whether to enable O_NOATIME when opening files and
 # directories. The default is atime=0, which enables O_NOATIME.
 #atime=1
