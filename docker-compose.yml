@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  burp-server:
+    image: pschiffe/burp-server
+    tty: true
+    volumes:
+      - burp-server-conf:/etc/burp
+      - burp-server-data:/var/spool/burp
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /run
+      - /tmp
+    environment:
+      - BUI_AGENT_PASSWORD=secret-burp-server-pw
+      - "BURP_CLIENTS_CONFIG=burp-client:super-secret"
+    networks:
+      burp:
+        aliases:
+          - burp
+
+  burp-ui:
+    image: pschiffe/burp-ui
+    volumes:
+      - burp-ui-conf:/etc/burp
+    environment:
+      - BUI_AGENT_PASSWORD=secret-burp-server-pw
+    networks:
+      - burp
+    ports:
+      - "5000:5000"
+    depends_on:
+      - burp-server
+
+  burp-client:
+    image: pschiffe/burp-client
+    hostname: burp-client
+    volumes:
+      - burp-client-conf:/etc/burp
+      - /etc:/tobackup/burp-client-etc:ro
+    security_opt:
+      - label:disable
+    environment:
+      - BURP_CLIENT_PASSWORD=super-secret
+    networks:
+      - burp
+    depends_on:
+      - burp-server
+
+networks:
+  burp:
+
+volumes:
+  burp-server-conf:
+  burp-server-data:
+  burp-ui-conf:
+  burp-client-conf:
