@@ -4,7 +4,7 @@ After=network.target burp.service
 
 [Service]
 Environment=CONFIG=/etc/burp/buiagent.cfg
-ExecStart=/usr/bin/bui-agent -vvvc $CONFIG
+ExecStart=/usr/local/bin/bui-agent -vvvc $CONFIG
 Restart=on-failure
 
 [Install]

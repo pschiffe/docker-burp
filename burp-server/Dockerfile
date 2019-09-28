@@ -1,28 +1,24 @@
-# Journald is broken in 25 and later for now https://github.com/docker/docker/issues/27202
-FROM fedora:24
-MAINTAINER "Peter Schiffer" <pschiffe@redhat.com>
+FROM fedora:30
+MAINTAINER "Peter Schiffer" <peter@rfv.sk>
 
-RUN dnf -y --setopt=tsflags=nodocs install 'dnf-command(copr)' \
-    && dnf -y copr enable yopito/burp2 \
-    && dnf -y --setopt=tsflags=nodocs install \
-        hostname \
-        burp2-server \
-        gettext \
-        python3-pyOpenSSL \
-        python3-gevent \
-        fuse-encfs \
-        rsync \
-        stunnel \
-        procps-ng \
-        https://kojipkgs.fedoraproject.org//packages/python-cffi/1.7.0/2.fc25/x86_64/python3-cffi-1.7.0-2.fc25.x86_64.rpm \
-    && dnf clean all \
-    && cp -a /etc/burp /etc/burp.tpl \
-    && rm -rf /etc/burp/*
+RUN dnf -y install \
+    burp-server \
+    fuse-encfs \
+    gettext \
+    hostname \
+    procps-ng \
+    python3-cffi \
+    python3-gevent \
+    python3-pyOpenSSL \
+    rsync \
+    stunnel \
+  && dnf clean all \
+  && cp -a /etc/burp /etc/burp.tpl \
+  && rm -rf /etc/burp/*
 
-RUN pip3 install "burp-ui[agent]" \
-    && rm -rf ~/.cache/*
+RUN pip3 install --no-cache-dir burp-ui-agent
 
-STOPSIGNAL SIGRTMIN+3
+STOPSIGNAL RTMIN+3
 RUN echo 'ForwardToConsole=yes' >> /etc/systemd/journald.conf
 
 ENV container=docker \
@@ -41,8 +37,8 @@ COPY rsync.sh.tpl /rsync.sh.tpl
 COPY docker-cmd.sh /init
 
 RUN systemctl enable burp \
-    && systemctl enable buiagent \
-    && systemctl enable umount-encfs \
-    && systemctl enable rsync-sync.timer
+  && systemctl enable buiagent \
+  && systemctl enable umount-encfs \
+  && systemctl enable rsync-sync.timer
 
 CMD [ "/init" ]
