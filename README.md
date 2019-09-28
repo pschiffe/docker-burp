@@ -24,19 +24,20 @@ Systemd is used to manage multiple processes inside of the container, so a coupl
 
 Besides, if you want to see the logs with `docker logs` command, allocate tty for the container with `-t, --tty` option.
 
+### Adding clients
+
+The client configuration can be automatically pre-created on server with `BURP_CLIENTS_CONFIG` env var. The format of this variable is: `'client1-hostname:client1-password client2-hostname:client2-password ...'`
+
 ### Example
 
 ```
 docker run -dt -p 4971:4971 --name burp-server \
   -v burp-server-conf:/etc/burp \
   -v burp-server-data:/var/spool/burp \
+  -e 'BURP_CLIENTS_CONFIG=host1:pass1 host2:pass2 host3:pass3'
   --tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
   pschiffe/burp-server
 ```
-
-### Adding clients
-
-To add burp clients to the server, copy `/etc/burp/clientconfdir/localclient` file inside of the server container to `/etc/burp/clientconfdir/[client hostname]` and change the password inside that file. Then you need to pass that password to the client, so it's allowed to talk to the server. Docs: https://burp.grke.org/docs/add-remove.html
 
 ### Encryption
 
