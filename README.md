@@ -22,7 +22,9 @@ The container uses two persistent volumes - `/etc/burp` for configuration and `/
 
 Systemd is used to manage multiple processes inside of the container, so a couple of special requirements are needed when running it: `/run` and `/tmp` must be mounted on tmpfs, and cgroup filesystem must be bind-mounted from the host. Example Docker run bit when running on Red Hat based distro: `--tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro`
 
-Besides, if you want to see the logs with `docker logs` command, allocate tty for the container with `-t, --tty` option.
+If you are using SELinux on the host, you need to enable the `container_manage_cgroup` variable with `setsebool -P container_manage_cgroup 1`.
+
+Besides that, if you want to see the logs with `docker logs` command, allocate tty for the container with `-t, --tty` option.
 
 ### Adding clients
 
