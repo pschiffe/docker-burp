@@ -102,3 +102,23 @@ docker run -d --name burp-client \
 ```
 
 Once this container is created, it will backup the specified data and exit. After that, it's recommended to start the container ~ every 20 minutes with `docker start burp-client`, so it can check with the server and backup new files if scheduled. The schedule is determined by the server, not the client.
+
+### Data recovery
+
+You may also use it to recover data from a distant server.
+You just have to provide arguments as you would to a regular burp client CLI.
+
+for example:
+
+```
+docker run -d --name burp-client \
+  -e BURP_SERVER=some-server.host \
+  -e BURP_CLIENT_PASSWORD=super-secret \
+  -v burp-client-conf:/etc/burp \
+  -v /etc:/tobackup/somehost-etc \
+  --hostname $HOSTNAME \
+  --security-opt label:disable \
+  pschiffe/burp-client \
+  -al /tobackup/somehost-etc
+```
+

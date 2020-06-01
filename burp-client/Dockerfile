@@ -19,4 +19,5 @@ VOLUME [ "/etc/burp" ]
 COPY burp.conf.tpl /etc/burp/burp.conf.tpl
 COPY docker-cmd.sh /docker-cmd.sh
 
-CMD [ "/docker-cmd.sh" ]
+ENTRYPOINT [ "/docker-cmd.sh" ]
+CMD [ "-a", "t" ]
