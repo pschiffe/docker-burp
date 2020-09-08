@@ -1,9 +1,9 @@
-FROM fedora:30
-MAINTAINER "Peter Schiffer" <peter@rfv.sk>
+FROM fedora:31
 
 RUN dnf -y install \
     python3-gevent \
     python3-gunicorn \
+    python3-pip \
   && dnf clean all
 
 RUN pip3 install --no-cache-dir \

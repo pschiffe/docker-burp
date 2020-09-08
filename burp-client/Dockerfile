@@ -1,5 +1,4 @@
-FROM fedora:30
-MAINTAINER "Peter Schiffer" <peter@rfv.sk>
+FROM fedora:31
 
 RUN dnf -y install \
     burp-client \

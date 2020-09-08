@@ -1,5 +1,4 @@
-FROM fedora:30
-MAINTAINER "Peter Schiffer" <peter@rfv.sk>
+FROM fedora:31
 
 RUN dnf -y install \
     burp-server \
@@ -10,6 +9,7 @@ RUN dnf -y install \
     procps-ng \
     python3-cffi \
     python3-gevent \
+    python3-pip \
     python3-pyOpenSSL \
     rsync \
     stunnel \
