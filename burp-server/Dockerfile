@@ -1,7 +1,9 @@
-FROM fedora:31
+FROM fedora:37
 
-RUN dnf -y install \
-    burp-server \
+RUN dnf -y install dnf-plugins-core \
+  && dnf -y copr enable yopito/burp2 \
+  && dnf -y install \
+    burp2-server \
     fuse-encfs \
     gettext \
     hostname \

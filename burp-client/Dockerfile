@@ -1,9 +1,12 @@
-FROM fedora:31
+FROM fedora:37
 
-RUN dnf -y install \
-    burp-client \
+RUN dnf -y install dnf-plugins-core \
+  && dnf -y copr enable yopito/burp2 \
+  && dnf -y install \
+    burp2-client \
     gettext \
     hostname \
+    openssl \
   && dnf clean all \
   && rm -f /etc/burp/burp.conf \
   && curl -fsSL https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > /usr/local/bin/wait-for-it.sh \

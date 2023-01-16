@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: "docker"
+    directory: "/burp-server"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "docker"
+    directory: "/burp-ui"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "docker"
+    directory: "/burp-client"
+    schedule:
+      interval: "monthly"

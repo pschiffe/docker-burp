@@ -2,13 +2,13 @@
 
 This repo contains Docker images with [burp 2.x](http://burp.grke.org/) server, client and a [web ui](https://git.ziirish.me/ziirish/burp-ui). All images are available at Docker Hub:
 
-https://hub.docker.com/r/pschiffe/burp-server/  
-https://hub.docker.com/r/pschiffe/burp-client/  
-https://hub.docker.com/r/pschiffe/burp-ui/  
+https://hub.docker.com/r/pschiffe/burp-server/
+https://hub.docker.com/r/pschiffe/burp-client/
+https://hub.docker.com/r/pschiffe/burp-ui/
 
 ## Burp Server
 
-[![](https://images.microbadger.com/badges/image/pschiffe/burp-server.svg)](https://microbadger.com/images/pschiffe/burp-server "Get your own image badge on microbadger.com")
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/pschiffe/burp-server/latest) ![Docker Pulls](https://img.shields.io/docker/pulls/pschiffe/burp-server)
 
 https://hub.docker.com/r/pschiffe/burp-server/
 
@@ -20,7 +20,7 @@ The container uses two persistent volumes - `/etc/burp` for configuration and `/
 
 ### Sytemd
 
-Systemd is used to manage multiple processes inside of the container, so a couple of special requirements are needed when running it: `/run` and `/tmp` must be mounted on tmpfs, and cgroup filesystem must be bind-mounted from the host. Example Docker run bit when running on Red Hat based distro: `--tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro`
+Systemd is used to manage multiple processes inside of the container, so a couple of special requirements are needed when running it: `/run` and `/tmp` must be mounted on tmpfs, and (sadly) container must be running as privileged for now. Example Docker run bit when running on Red Hat based distro: `--tmpfs /run --tmpfs /tmp --privileged`
 
 If you are using SELinux on the host, you need to enable the `container_manage_cgroup` variable with `setsebool -P container_manage_cgroup 1`.
 
@@ -37,7 +37,7 @@ docker run -dt -p 4971:4971 --name burp-server \
   -v burp-server-conf:/etc/burp \
   -v burp-server-data:/var/spool/burp \
   -e 'BURP_CLIENTS_CONFIG=host1:pass1 host2:pass2 host3:pass3'
-  --tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+  --tmpfs /run --tmpfs /tmp --privileged \
   pschiffe/burp-server
 ```
 
@@ -55,7 +55,7 @@ And that's not all, there is one more feature - if you set `RESTORE_FROM_RSYNC` 
 
 ## Burp Web UI
 
-[![](https://images.microbadger.com/badges/image/pschiffe/burp-ui.svg)](https://microbadger.com/images/pschiffe/burp-ui "Get your own image badge on microbadger.com")
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/pschiffe/burp-ui/latest) ![Docker Pulls](https://img.shields.io/docker/pulls/pschiffe/burp-ui)
 
 https://hub.docker.com/r/pschiffe/burp-ui/
 
@@ -76,7 +76,7 @@ docker run -d -p 5000:5000 --name burp-ui \
 
 ## Burp Client
 
-[![](https://images.microbadger.com/badges/image/pschiffe/burp-client.svg)](https://microbadger.com/images/pschiffe/burp-client "Get your own image badge on microbadger.com")
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/pschiffe/burp-client/latest) ![Docker Pulls](https://img.shields.io/docker/pulls/pschiffe/burp-client)
 
 https://hub.docker.com/r/pschiffe/burp-client/
 
@@ -121,4 +121,3 @@ docker run -d --name burp-client \
   pschiffe/burp-client \
   -al /tobackup/somehost-etc
 ```
-

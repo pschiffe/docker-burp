@@ -4,10 +4,10 @@ services:
   burp-server:
     image: pschiffe/burp-server
     tty: true
+    privileged: true
     volumes:
       - burp-server-conf:/etc/burp
       - burp-server-data:/var/spool/burp
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
     tmpfs:
       - /run
       - /tmp

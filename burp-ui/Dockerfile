@@ -1,4 +1,4 @@
-FROM fedora:31
+FROM fedora:37
 
 RUN dnf -y install \
     python3-gevent \
@@ -17,5 +17,7 @@ VOLUME [ "/etc/burp" ]
 
 COPY burpui.cfg.tpl /etc/burp.tpl/burpui.cfg.tpl
 COPY docker-cmd.sh /docker-cmd.sh
+
+ENV LANG="en_US.UTF-8"
 
 CMD [ "/docker-cmd.sh" ]

@@ -8,7 +8,7 @@
 # process.
 # You can also use whatever custom backend you like if it is located in the
 # 'plugins' directory and if it implements the right interface.
-backend = burp2
+backend = multi
 # On which port is the application listening
 port = 5000
 # On which address is the application listening
