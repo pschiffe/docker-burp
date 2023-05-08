@@ -1,4 +1,4 @@
-FROM fedora:37
+FROM fedora:38
 
 RUN dnf -y install dnf-plugins-core \
   && dnf -y copr enable yopito/burp2 \
