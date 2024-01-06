@@ -1,8 +1,14 @@
-FROM fedora:38
+FROM rockylinux/rockylinux:9-ubi
 
-RUN dnf -y install dnf-plugins-core \
-  && dnf -y copr enable yopito/burp2 \
-  && dnf -y install \
+RUN echo 'install_weak_deps=False' >> /etc/dnf/dnf.conf \
+  && echo 'tsflags=nodocs' >> /etc/dnf/dnf.conf \
+  && echo 'assumeyes=True' >> /etc/dnf/dnf.conf \
+  && dnf install dnf-plugins-core epel-release \
+  && dnf config-manager --set-disabled epel-cisco-openh264 \
+  && dnf config-manager --set-enabled crb \
+  && dnf copr enable yopito/burp2 \
+  && dnf --refresh upgrade \
+  && dnf install \
     burp2-server \
     fuse-encfs \
     gettext \
@@ -24,8 +30,7 @@ RUN pip3 install --no-cache-dir burp-ui-agent
 STOPSIGNAL RTMIN+3
 RUN echo 'ForwardToConsole=yes' >> /etc/systemd/journald.conf
 
-ENV container=docker \
-    BUI_AGENT_PASSWORD=BurpAgent123
+ENV BUI_AGENT_PASSWORD=BurpAgent123
 
 EXPOSE 4971 10000
 
