@@ -8,7 +8,7 @@ if [ -z "$(ls -A /etc/burp)" ]; then
   sed -i "s/appsecret = random/appsecret = ${BURPUI_APP_SECRET}/g" /etc/burp/burpui.cfg.tpl
 fi
 
-envtpl < /etc/burp/burpui.cfg.tpl > /etc/burp/burpui.cfg
+subvars < /etc/burp/burpui.cfg.tpl > /etc/burp/burpui.cfg
 
 exec /usr/bin/gunicorn-3 \
   --worker-class gevent \

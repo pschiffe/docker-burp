@@ -180,15 +180,15 @@ scookie = true
 # application. You can also set it to 'none' although this is not recommended.
 appsecret = random
 
-{% if BURP_ENV_BUI_AGENT_PASSWORD is defined or BUI_AGENT_PASSWORD is defined %}
+{{ if any .BURP_ENV_BUI_AGENT_PASSWORD .BUI_AGENT_PASSWORD -}}
 [Agent:burp]
 # bui-agent address
 host = burp
 # bui-agent port
 port = 10000
 # bui-agent password
-password = {{ BURP_ENV_BUI_AGENT_PASSWORD | default(BUI_AGENT_PASSWORD) }}
+password = {{ .BURP_ENV_BUI_AGENT_PASSWORD | default .BUI_AGENT_PASSWORD }}
 # enable SSL
 ssl = true
 timeout = 0
-{% endif %}
+{{ end -}}
