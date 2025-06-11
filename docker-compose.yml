@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   burp-server:
     image: pschiffe/burp-server
