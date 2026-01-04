@@ -6,10 +6,10 @@ RUN echo 'install_weak_deps=False' >> /etc/dnf/dnf.conf \
   && dnf install dnf-plugins-core epel-release \
   && dnf config-manager --set-disabled epel-cisco-openh264 \
   && dnf config-manager --set-enabled crb \
-  && dnf copr enable yopito/burp2 \
+  && dnf copr enable hnsz2002/burp-stable \
   && dnf --refresh upgrade \
   && dnf install \
-    burp2-server \
+    burp-server \
     fuse-encfs \
     gettext \
     hostname \

@@ -1,6 +1,6 @@
 # Burp Backup in Docker
 
-This repository contains Docker images for the [Burp 2.x](http://burp.grke.org/) server, client, and [web UI](https://git.ziirish.me/ziirish/burp-ui). All images are available at Docker Hub:
+This repository contains Docker images for the [Burp](http://burp.grke.org/) server, client, and [web UI](https://git.ziirish.me/ziirish/burp-ui). All images are available at Docker Hub:
 
 https://hub.docker.com/r/pschiffe/burp-server/
 

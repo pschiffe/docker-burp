@@ -7,7 +7,7 @@ password = ${BURP_CLIENT_PASSWORD}
 cname = ${HOSTNAME}
 # A different port to use for restores - see the man page for more options.
 #port_restore = 5971
-pidfile = /var/run/burp.client.pid
+pidfile = /run/burp.client.pid
 syslog = 0
 stdout = 1
 progress_counter = 1
