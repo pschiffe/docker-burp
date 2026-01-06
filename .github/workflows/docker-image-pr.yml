@@ -13,7 +13,7 @@ jobs:
     steps:
 
       - name: Check Out Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -24,7 +24,7 @@ jobs:
 
       - name: Build burp server
         id: docker_build_burp_server_latest
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./burp-server
           file: ./burp-server/Dockerfile
@@ -38,7 +38,7 @@ jobs:
 
       - name: Build burp ui
         id: docker_build_burp_ui_latest
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./burp-ui
           file: ./burp-ui/Dockerfile
@@ -52,7 +52,7 @@ jobs:
 
       - name: Build burp client
         id: docker_build_burp_client_latest
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./burp-client
           file: ./burp-client/Dockerfile
